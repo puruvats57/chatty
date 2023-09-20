@@ -1,0 +1,55 @@
+<html>
+
+<body>
+  joined successfully
+  <script>
+    // Define a function to run your script
+    async function runScript() {
+      console.log("hye joined");
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const pathnameParts = url.pathname.split('/');
+      var grpId;
+      var email;
+      if (pathnameParts.length >= 3) {
+        grpId = pathnameParts[2];
+        email = pathnameParts[3];
+        console.log("Group ID:", grpId);
+        console.log("Email:", email);
+      } else {
+        console.error("Invalid URL format");
+      }
+      /*const grpId = url.searchParams.get('id');
+      console.log("grpid", grpId);
+      const email = url.searchParams.get('email');
+      console.log("email", email);*/
+      const dataToSend = {
+        grpId: grpId,
+        email: email,
+      };
+      const response = await fetch('http://localhost:5000/grpJoined', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      if (response.status === 200) {
+        const responseData = await response.json();
+        if (responseData.message === "group joined successfully") {
+          setTimeout(function () {
+            // Redirect to http://localhost:5000/home
+            window.location.href = 'http://localhost:5000/home';
+          }, 1000);
+        }
+      }
+
+
+    }
+
+    // Call the function when the page loads
+    window.onload = runScript;
+  </script>
+</body>
+
+</html>

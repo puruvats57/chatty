@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Members</title>
+</head>
+<body>
+    <h1>Add Members Page</h1>
+    
+    <script>
+        // JavaScript code to retrieve grpId from the query parameter
+        const currentUrl = window.location.href;
+        const url = new URL(currentUrl);
+        const pathSegments = url.pathname.split('/');
+
+        const desiredValue = pathSegments[pathSegments.length - 1];
+        const grpId=desiredValue;
+        //const grpId = url.searchParams.get('grpId');
+    </script>
+
+    <label for="email">Enter Email:</label>
+    <input type="email" id="email" name="email" placeholder="user@example.com">
+    <button id="sendInvite">Send Invite</button>
+
+    <script>
+        const sendInviteButton = document.getElementById('sendInvite');
+
+        sendInviteButton.addEventListener('click', async () => {
+            // Data to send in the Fetch request
+            const email = document.getElementById('email').value;
+            
+            if (!email) {
+                alert('Please enter an email address.');
+                return;
+            }
+
+            const dataToSend = {
+                grpId: grpId,
+                email: email,
+                
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/addMembers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend),
+                });
+
+                if (response.ok) {
+                    // Handle a successful response here
+                    console.log('Invite sent successfully');
+                } else {
+                    // Handle errors here
+                    console.error('Failed to send invite');
+                }
+            } catch (error) {
+                console.error('Error sending invite:', error);
+            }
+        });
+    </script>
+</body>
+</html>

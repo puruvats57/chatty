@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome to chatty</title>
+</head>
+
+<body>
+  <label for="name">Name:</label>
+  <input type="text" id="email" placeholder="Enter your email">
+  <input type="text" id="pass" placeholder="Enter your password">
+  <button id="loginButton">Login</button>
+  dont have an account?<a href="/register">Sign up</a>
+
+  <script>
+    const loginButton = document.getElementById('loginButton');
+    var email = document.getElementById('email').value;
+    var pass = document.getElementById('pass').value;
+
+    loginButton.addEventListener('click', async () => {
+      // const email = email.value;
+      // const pass = pass.value;
+      console.log("email", email);
+      if (email && pass) {
+        try {
+          const response = await fetch('http://localhost:5000/loginPost', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, pass: pass })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.token) {
+              localStorage.setItem('token', data.token);
+              console.log('Login successful');
+              window.location.href = '/home'
+            } else {
+              console.error('Login failed');
+            }
+          } else {
+            console.error('Login failed');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
