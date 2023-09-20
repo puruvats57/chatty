@@ -9,7 +9,7 @@
   <h1>Home Page</h1>
   <a href="/creategrp">createGroup</a>
   <button onClick="logout()">Logout</button>
-
+  <img id="uploadedImage" style="display: none; max-width: 100%; height: auto;">
   <h2>JSON Data Display</h2>
   <div id="data-container"></div>
 
@@ -71,6 +71,13 @@
             const jsonData = await response.json();
             console.log("jsondata", jsonData);
             jsonData.formattedData.forEach(item => {
+              const uploadedImage = document.createElement('img');
+              uploadedImage.style.display = 'none'; // Hide the image by default
+              uploadedImage.style.maxWidth = '100%';
+              uploadedImage.style.height = 'auto';
+              uploadedImage.id = 'uploadedImage';
+              uploadedImage.src = item.fileLink;
+              uploadedImage.style.display = 'block';
               console.log("items", item._id);
               const dataElement = document.createElement('p');
               // Create a link element for the group name
@@ -81,6 +88,7 @@
               const additionalSpan = document.createElement('span');
               additionalSpan.id = item._id;
               additionalSpan.textContent = `${item.count}`;
+              dataElement.appendChild(uploadedImage);
               dataElement.appendChild(groupLink);
               dataElement.appendChild(additionalSpan);
               dataContainer.appendChild(dataElement);

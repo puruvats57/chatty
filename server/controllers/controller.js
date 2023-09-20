@@ -61,8 +61,8 @@ exports.createGroup = async (req, res, next) => {
   }
   else {
     console.log("uid", req.uid);
-    const id = req.uid.uid.id;
-
+    const id = req.uid.id;
+    console.log("cret grp", req.body);
     const { groupname } = req.body;
 
     let user = await User.findOne({ _id: id });
@@ -79,6 +79,7 @@ exports.createGroup = async (req, res, next) => {
 
     grp = new Groups({
       groupname,
+      fileLink: req.file.location,
       createdBy
     });
 
@@ -172,10 +173,11 @@ exports.getGroups = async (req, res) => {
   //console.log("count", count);
 
 
-  var data = await Groups.find({ _id: { $in: grpids } }).select('id groupname');
+  var data = await Groups.find({ _id: { $in: grpids } }).select('id groupname fileLink');
   const formattedData = data.map((item, index) => ({
     _id: item._id.toString(),
     groupname: item.groupname,
+    fileLink:item.fileLink,
     count: count[index]
   }));
   //console.log("data", formattedData);
@@ -303,7 +305,6 @@ exports.grpJoined = async (req, res) => {
 
   res.status(200).json({ message: "group joined successfully" });
 }
-
 
 
 

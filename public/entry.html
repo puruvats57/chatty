@@ -14,12 +14,13 @@
 
   <script>
     const loginButton = document.getElementById('loginButton');
-    var email = document.getElementById('email').value;
-    var pass = document.getElementById('pass').value;
+
 
     loginButton.addEventListener('click', async () => {
       // const email = email.value;
       // const pass = pass.value;
+      var email = document.getElementById('email').value;
+      var pass = document.getElementById('pass').value;
       console.log("email", email);
       if (email && pass) {
         try {

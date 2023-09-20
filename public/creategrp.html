@@ -1,30 +1,39 @@
 <html>
-    <body>
-        <input type="text" id="name">
-        <button onclick="creategrp()">create</button>
-    </body>
-    <script>
-        async function creategrp(){
-            const nameInput = document.getElementById('name').value;
-            console.log("grpnme",nameInput);
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/createGroup', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-            token: token,
-            groupname:nameInput
-      }),
-          });
-          console.log("res",response);
-          if(response.ok){
-             console.log("successfully created grp")
-          }
-          else{
-            console.log("error creating grp")
-          }
-        }
-    </script>
+
+<body>
+  <input type="file" id="file" accept="image/*,.pdf">
+  <button id="uploadFile">Upload</button>
+  <input type="text" id="name">
+  <button onclick="creategrp()">create</button>
+</body>
+<script>
+  async function creategrp() {
+    const nameInput = document.getElementById('name').value;
+    console.log("grpnme", nameInput);
+    const token = localStorage.getItem('token');
+    const fileInput = document.getElementById('file');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('groupname', nameInput);
+
+
+    const response = await fetch('http://localhost:5000/createGroup', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData, 
+    });
+    console.log("res", response);
+    if (response.ok) {
+      console.log("successfully created grp");
+      window.location.href = '/home';
+    }
+    else {
+      console.log("error creating grp")
+    }
+  }
+</script>
+
 </html>
