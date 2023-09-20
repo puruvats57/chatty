@@ -2,23 +2,85 @@
 <html>
 
 <head>
-  <title>Welcome to chatty</title>
+  <title>Welcome to Chatty</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      /* Light gray background */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label {
+      font-size: 16px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    button#loginButton {
+      background-color: #0073e6;
+      /* WhatsApp blue color */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button#loginButton:hover {
+      background-color: #005bbf;
+      /* Darker blue on hover */
+    }
+
+    a {
+      text-decoration: none;
+      color: #0073e6;
+      /* WhatsApp blue color */
+      margin-top: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
-  <label for="name">Name:</label>
-  <input type="text" id="email" placeholder="Enter your email">
-  <input type="text" id="pass" placeholder="Enter your password">
-  <button id="loginButton">Login</button>
-  dont have an account?<a href="/register">Sign up</a>
+  <div class="card">
+    <label for="name">Name:</label>
+    <input type="text" id="email" placeholder="Enter your email">
+    <input type="password" id="pass" placeholder="Enter your password">
+    <button id="loginButton">Login</button>
+    <p>Don't have an account? <a href="/register">Sign up</a></p>
+  </div>
 
   <script>
     const loginButton = document.getElementById('loginButton');
 
-
     loginButton.addEventListener('click', async () => {
-      // const email = email.value;
-      // const pass = pass.value;
       var email = document.getElementById('email').value;
       var pass = document.getElementById('pass').value;
       console.log("email", email);

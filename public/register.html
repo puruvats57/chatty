@@ -1,11 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <form action="/register" method="POST">
-      <input type="text" name="name" placeholder="enter name">
-      <input type="text" name="email" placeholder="enter email">
-      <input type="password" name="password" placeholder="enter password">
-      <button type="submit">Register</button>
-    </form>
-  </body>
+
+<head>
+  <title>Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      
+      /* WhatsApp green color */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      background-color: #0073e6;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #005bbf;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="/register" method="POST">
+    <h1>Registration</h1>
+    <input type="text" name="name" placeholder="Enter name">
+    <input type="text" name="email" placeholder="Enter email">
+    <input type="password" name="password" placeholder="Enter password">
+    <button type="submit">Register</button>
+  </form>
+</body>
+
 </html>
