@@ -256,7 +256,7 @@ exports.addMembers = async (req, res) => {
       pass: 'hixwjkmxxykbrnwt',
     },
   });
-  const dynamicURL = `http://localhost:5000/grpJoined/${grpId}/${email}`;
+  const dynamicURL = `https://chat-tixo.onrender.com/grpJoined/${grpId}/${email}`;
   // Create an HTML email template with a button
   const emailBody = `
   <html>
