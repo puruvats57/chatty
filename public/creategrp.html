@@ -1,0 +1,30 @@
+<html>
+    <body>
+        <input type="text" id="name">
+        <button onclick="creategrp()">create</button>
+    </body>
+    <script>
+        async function creategrp(){
+            const nameInput = document.getElementById('name').value;
+            console.log("grpnme",nameInput);
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:5000/createGroup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            token: token,
+            groupname:nameInput
+      }),
+          });
+          console.log("res",response);
+          if(response.ok){
+             console.log("successfully created grp")
+          }
+          else{
+            console.log("error creating grp")
+          }
+        }
+    </script>
+</html>
