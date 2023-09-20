@@ -1,33 +1,20 @@
-
 const jwt = require("jsonwebtoken");
 
 exports.isAuth = (req, res, next) => {
-
-  const { token} = req.body;
-
-  console.log("isauth", token);
-  //const token = req.body.token;
-  //const token = req.body.t;
-
-    // CHECK IF WE EVEN HAVE A TOKEN
-  if (!token) {
-    console.log("not found");
+  const authHeader = req.headers['authorization'];
+  
+  if (!authHeader) {
     req.status = "loginfirst";
-    
   }
-  else {
+
+  const token = authHeader.split(' ')[1]; // Extract the token from the "Bearer" format
+
+  try {
     const uid = jwt.verify(token, "hell");
-    if (uid) {
-      console.log("uid from auth",uid);
-      req.uid = { uid };
-      
-    }
-    else {
-      console.log('logi first');
-      req.status = "loginfirst";
-      
-    }
-    
-}
+    req.uid = uid; // Attach the decoded user ID to the request object
     next();
+  } catch (error) {
+    console.log('Token verification failed', error);
+    req.status = "loginfirst";
+  }
 };

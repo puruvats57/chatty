@@ -1,7 +1,59 @@
 <html>
 
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #25d366;
+      /* WhatsApp green color */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      /* Text color */
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    /* Add a loading animation */
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+  </style>
+  </style>
+</head>
+
 <body>
-  joined successfully
+  <h1>Joined Successfully</h1>
+  <p>Thank you for joining!</p>
+  <div class="spinner"></div>
   <script>
     // Define a function to run your script
     async function runScript() {

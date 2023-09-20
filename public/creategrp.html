@@ -1,30 +1,111 @@
+<!DOCTYPE html>
 <html>
-    <body>
-        <input type="text" id="name">
-        <button onclick="creategrp()">create</button>
-    </body>
-    <script>
-        async function creategrp(){
-            const nameInput = document.getElementById('name').value;
-            console.log("grpnme",nameInput);
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/createGroup', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-            token: token,
-            groupname:nameInput
-      }),
-          });
-          console.log("res",response);
-          if(response.ok){
-             console.log("successfully created grp")
-          }
-          else{
-            console.log("error creating grp")
-          }
-        }
-    </script>
+
+<head>
+  <title>Create Group</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      /* Light gray background */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label {
+      font-size: 16px;
+      color: #0073e6;
+      /* WhatsApp blue color */
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+      max-width: 150px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    button#createGroup {
+      background-color: #0073e6;
+      /* WhatsApp blue color */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button#createGroup:hover {
+      background-color: #005bbf;
+      /* Darker blue on hover */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <label for="file">Select Group Icon</label>
+    <input type="file" id="file" accept="image/*,.pdf">
+    <input type="text" id="name" placeholder="Enter Group Name">
+    <button id="createGroup">Create Group</button>
+  </div>
+
+  <script>
+    async function creategrp() {
+      const nameInput = document.getElementById('name').value;
+      console.log("grpnme", nameInput);
+      const token = localStorage.getItem('token');
+      const fileInput = document.getElementById('file');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('groupname', nameInput);
+
+      const response = await fetch('http://localhost:5000/createGroup', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      console.log("res", response);
+      if (response.ok) {
+        console.log("successfully created grp");
+        window.location.href = '/home';
+      } else {
+        console.log("error creating grp")
+      }
+    }
+  </script>
+</body>
+
 </html>

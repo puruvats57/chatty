@@ -3,15 +3,79 @@
 
 <head>
   <title>Chat App - Home</title>
+  <style>
+    /* Add CSS for circular image */
+    #data-container {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #data-container li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+    }
+
+    #data-container img {
+      max-width: 60px;
+      height: auto;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    #data-container a {
+      flex: 1;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    #data-container span {
+      font-size: 14px;
+      color: #888;
+    }
+
+    h1 {
+      background-color: #075e54;
+      color: #fff;
+      padding: 10px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+      margin-right: 10px;
+      padding: 10px 20px;
+      background-color: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Home Page</h1>
-  <a href="/creategrp">createGroup</a>
-  <button onClick="logout()">Logout</button>
+  <h1>Groups</h1>
+  <div class="action-buttons">
+    <a href="/creategrp">Create Group</a>
+    <button onClick="logout()">Logout</button>
+  </div>
 
-  <h2>JSON Data Display</h2>
-  <div id="data-container"></div>
+  <h2>Group Chats</h2>
+  <ul id="data-container"></ul>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -32,7 +96,9 @@
       console.log('Current URL:', currentWindowUrl);
       socket.emit('url', { url: currentWindowUrl, uid: userId, grpId: id, count });
     });
+
     var token;
+
     document.addEventListener("DOMContentLoaded", async function () {
       socket.emit('onHome');
 
@@ -71,19 +137,28 @@
             const jsonData = await response.json();
             console.log("jsondata", jsonData);
             jsonData.formattedData.forEach(item => {
-              console.log("items", item._id);
-              const dataElement = document.createElement('p');
+              const uploadedImage = document.createElement('img');
+              uploadedImage.style.display = 'none'; // Hide the image by default
+              uploadedImage.id = 'uploadedImage';
+              uploadedImage.src = item.fileLink;
+              uploadedImage.style.display = 'block';
+
+              const listItem = document.createElement('li');
+              listItem.appendChild(uploadedImage);
+
               // Create a link element for the group name
               const groupLink = document.createElement('a');
               groupLink.textContent = `${item.groupname}`;
-              //groupLink.href = `/group?id=${item._id}`;
               groupLink.href = `/group/${item._id}`;
+              listItem.appendChild(groupLink);
+
               const additionalSpan = document.createElement('span');
+              additionalSpan.style.color = 'green';
               additionalSpan.id = item._id;
               additionalSpan.textContent = `${item.count}`;
-              dataElement.appendChild(groupLink);
-              dataElement.appendChild(additionalSpan);
-              dataContainer.appendChild(dataElement);
+              listItem.appendChild(additionalSpan);
+
+              dataContainer.appendChild(listItem);
             });
           } else {
             console.error('Error fetching JSON data:', response.statusText);
@@ -95,10 +170,11 @@
         console.error('Token not found');
       }
     });
+
     function logout() {
       console.log("token", token);
       localStorage.removeItem('token');
-      window.location.href = '/'
+      window.location.href = '/';
     }
   </script>
 </body>

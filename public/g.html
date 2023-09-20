@@ -1,178 +1,139 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Chat App - Group</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-9zi04Igs3b/Inhi8wG8h7f3oMQp1zdbRg5M5/A8dCzK1jFpJwN2jF6cv7ubZ" crossorigin="anonymous">
-
   <style>
-    /* Add CSS to style the messages and sendby elements */
-    .message-container {
-      display: flex;
-      align-items: baseline;
-      margin-bottom: 10px;
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
-    .sender-message {
-      color: red;
-      display: flex;
-      align-items: baseline;
+    /* Header Styles */
+    h1 {
+      background-color: #075e54;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      margin: 0;
     }
 
-    .sender {
-      color: red;
-      margin-right: 5px;
+    /* Chat Container Styles */
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
     }
 
+    /* Message Styles */
     .message {
-      color: green;
-      margin-right: 5px;
+      display: flex;
+      margin-bottom: 10px;
+      word-wrap: break-word;
     }
 
-    /* Style for the text input box */
-    #messageInput {
-      padding: 10px;
-      border: 2px solid #007BFF;
-      border-radius: 5px;
-      margin-top: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      /* Include padding and border in the width */
-    }
-
-    /* Style for the file input box */
-
-
-    #uploadFile {
-      background-color: #007BFF;
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #25d366;
       color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
+      text-align: center;
+      line-height: 40px;
+      font-size: 18px;
+      margin-right: 10px;
     }
 
-    /* Style for the uploaded image */
-    #uploadedImage {
-      display: none;
-      max-width: 100%;
-      height: auto;
-      border: 2px solid #007BFF;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-
-    /* Style for the download link */
-    #fileDownloadLink {
-      display: none;
-      background-color: #007BFF;
-      color: #fff;
-      padding: 10px;
-      text-decoration: none;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-
-    .delete-button {
-      background-color: #ff6347;
-      /* Red color for delete buttons */
-      color: #fff;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-left: 5px;
-    }
-
-    /* Style for message containers */
-    .message-container {
-      background-color: #f2f2f2;
-      /* Light gray background for messages */
+    .message-content {
+      background-color: #f0f0f0;
       border-radius: 10px;
       padding: 10px;
-      margin-bottom: 10px;
     }
-    #add {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
+
+    .message-content.sent {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+    }
+
+    /* Input Styles */
+    .input-container {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    #messageInput {
+      flex-grow: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #sendMessage {
+      background-color: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 16px;
+    }
+
+    /* Media Styles */
+    .media {
+      max-width: 100%;
+      height: auto;
+    }
+
   </style>
 </head>
-
 <body>
-  <!-- Inside the <body> ... </body> section -->
   <h1>Group Page</h1>
-  <div>
-    <button id="add">Add Members</button>
+  <div class="chat-container" id="chat-container">
+    <!-- Chat messages will be displayed here -->
+  </div>
+  <div class="input-container">
+    <input type="text" id="messageInput" placeholder="Type your message">
+    <button id="sendMessage">Send</button>
   </div>
 
-  <!--<div id="messages"></div>-->
-  <div id="data-container"style="margin-top: 20px;"></div>
-  <input type="text" id="messageInput" placeholder="Type your message">
-  <button id="sendMessage">Send</button>
   <input type="file" id="file" accept="image/*,.pdf">
-  <button id="uploadFile">send media</button>
+  <button id="uploadFile">Upload</button>
 
-  <img id="uploadedImage" style="display: none; max-width: 100%; height: auto;">
+  <!-- Display the image -->
+  <img id="uploadedImage" class="media">
 
+  <!-- Display the file download link -->
   <a id="fileDownloadLink" href="" style="display: none;" download>Download File</a>
-
-
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    // JavaScript code for handling chat functionality goes here
     const addButton = document.getElementById('add');
     addButton.addEventListener('click', async () => {
       const currentUrl = window.location.href;
       const url = new URL(currentUrl);
       const pathSegments = url.pathname.split('/');
-
       const desiredValue = pathSegments[pathSegments.length - 1];
       const grpId = desiredValue;
-      //const id = url.searchParams.get('id');
-
-      /* const dataToSend = {
-         grpId: id,
-       };*/
-      /*const queryString = Object.keys(dataToSend)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(dataToSend[key])}`)
-        .join('&');*/
-
       window.location.href = `/addMembers/${grpId}`;
-
     });
 
     const socket = io();
     var dataContainer = document.getElementById('data-container');
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
-    //const id = url.searchParams.get('id');
-
-    //console.log('Extracted ID:', id);
     const pathSegments = url.pathname.split('/');
-
     const desiredValue = pathSegments[pathSegments.length - 1];
     const id = desiredValue;
-    console.log(id);
 
     const token = localStorage.getItem('token');
     const payloadBase64 = token.split('.')[1];
     const payloadJson = atob(payloadBase64);
     const payload = JSON.parse(payloadJson);
-
-    // Use the payload data
-    console.log('Decoded Token Payload:', payload.id);
-
-    const uid = payload.id; // Extracted UID from the payload
+    const uid = payload.id;
 
     function joinGroup() {
       socket.emit('join', { grpId: id, uid: uid });
@@ -194,7 +155,6 @@
           joinMessageDiv.textContent = `You joined`;
           let messageContainer = document.getElementById('data-container');
           messageContainer.appendChild(joinMessageDiv);
-
         }
       });
 
@@ -216,31 +176,27 @@
         senderDiv.classList.add('sender');
 
         if (text) {
-          // If there is text, display it in a message div
           const messageDiv = document.createElement('div');
           messageDiv.textContent = `message-${text}`;
           messageDiv.classList.add('message');
           senderMessageDiv.appendChild(senderDiv);
           senderMessageDiv.appendChild(messageDiv);
         } else if (fileLink) {
-          // If there is a fileLink, check if it's a PDF or an image
           const fileDownloadLink = document.createElement('a');
-          fileDownloadLink.style.display = 'none'; // Hide the download link by default
+          fileDownloadLink.style.display = 'none';
           fileDownloadLink.href = fileLink;
           fileDownloadLink.textContent = 'Download File';
-          fileDownloadLink.download = 'file.pdf'; // Change the download filename as needed
+          fileDownloadLink.download = 'file.pdf';
 
           const uploadedImage = document.createElement('img');
-          uploadedImage.style.display = 'none'; // Hide the image by default
+          uploadedImage.style.display = 'none';
           uploadedImage.style.maxWidth = '100%';
           uploadedImage.style.height = 'auto';
           uploadedImage.id = 'uploadedImage';
 
           if (fileLink.toLowerCase().endsWith('.pdf')) {
-            // If it's a PDF, show the download link
             fileDownloadLink.style.display = 'block';
           } else {
-            // If it's an image, show the image
             uploadedImage.src = fileLink;
             uploadedImage.style.display = 'block';
           }
@@ -252,7 +208,6 @@
 
         const removeForMeButton = document.createElement('button');
         removeForMeButton.textContent = 'delete for me';
-        removeForMeButton.classList.add('custom-button');
         removeForMeButton.addEventListener('click', async () => {
           const response = await fetch('http://localhost:5000/deleteMsg', {
             method: 'POST',
@@ -267,7 +222,6 @@
         const removeButton = document.createElement('button');
         if (uid == senderuid) {
           removeButton.textContent = 'delete for everyone';
-          removeForMeButton.classList.add('custom-button');
           removeButton.addEventListener('click', async () => {
             const response = await fetch('http://localhost:5000/deleteMsg', {
               method: 'POST',
@@ -302,7 +256,6 @@
       });
 
       document.getElementById('uploadFile').addEventListener('click', async () => {
-        console.log("hye upload");
         const uploadedImage = document.getElementById('uploadedImage');
         const fileDownloadLink = document.getElementById('fileDownloadLink');
         const fileInput = document.getElementById('file');
@@ -322,33 +275,26 @@
             return response.json();
           })
           .then(data => {
-            // Handle the response data here
             const fileLink = data.fileLink;
-
-
-            /*if (fileLink) {
+            if (fileLink) {
               if (fileLink.toLowerCase().endsWith('.pdf')) {
-                
                 uploadedImage.style.display = 'none';
                 fileDownloadLink.href = fileLink;
                 fileDownloadLink.style.display = 'block';
               } else {
-                
                 fileDownloadLink.style.display = 'none';
                 uploadedImage.src = fileLink;
                 uploadedImage.style.display = 'block';
               }
-            }*/
+            }
           })
           .catch(error => {
-            // Handle errors here
             console.error('There was a problem with the fetch operation:', error);
           });
       });
 
-
+      
     }
-
 
     async function fetchMessages() {
       try {
@@ -357,36 +303,29 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ grpId: id, uid: uid }), // Send the ID as the request body
+          body: JSON.stringify({ grpId: id, uid: uid }),
         });
 
         const data = await response.json();
-        console.log("group data", data.texts);
-
         data.texts.forEach(message => {
           const messageContainer = document.createElement('div');
           messageContainer.classList.add('message-container');
 
           const sendby = document.createElement('span');
           sendby.textContent = `sendBy-${message.sendby}`;
-          sendby.classList.add('sender');
           const messageDiv = document.createElement('div');
           messageDiv.classList.add('message');
 
           if (message.text) {
-            // If there is text, display it in a message div
             messageDiv.textContent = `message-${message.text}`;
           } else if (message.fileLink) {
-            // If there is a fileLink, check if it's a PDF or an image
             if (message.fileLink.toLowerCase().endsWith('.pdf')) {
-              // Create a download link for PDF
               const fileDownloadLink = document.createElement('a');
               fileDownloadLink.href = message.fileLink;
               fileDownloadLink.textContent = 'Download File';
-              fileDownloadLink.download = 'file.pdf'; // Change the download filename as needed
+              fileDownloadLink.download = 'file.pdf';
               messageContainer.appendChild(fileDownloadLink);
             } else {
-              // Create an image element for images
               const uploadedImage = document.createElement('img');
               uploadedImage.style.maxWidth = '100%';
               uploadedImage.style.height = 'auto';
@@ -397,7 +336,6 @@
 
           const removeForMeButton = document.createElement('button');
           removeForMeButton.textContent = 'delete for me';
-          removeForMeButton.classList.add('custom-button');
           removeForMeButton.addEventListener('click', async () => {
             const response = await fetch('http://localhost:5000/deleteMsg', {
               method: 'POST',
@@ -413,9 +351,7 @@
 
           if (message.sentById == uid) {
             removeButton.textContent = 'delete for everyone';
-            removeForMeButton.classList.add('custom-button');
             removeButton.addEventListener('click', async () => {
-              console.log("remove", message.textid);
               const response = await fetch('http://localhost:5000/deleteMsg', {
                 method: 'POST',
                 headers: {
@@ -428,8 +364,9 @@
           } else {
             removeButton.style.display = 'none';
           }
-          messageContainer.appendChild(sendby);
+
           messageContainer.appendChild(messageDiv);
+          messageContainer.appendChild(sendby);
           messageContainer.appendChild(removeButton);
           messageContainer.appendChild(removeForMeButton);
           dataContainer.appendChild(messageContainer);
@@ -439,12 +376,8 @@
       }
     }
 
-
-    joinGroup(); // Call the function when the page loads
-    fetchMessages(); // Call the function to fetch messages every time the page loads
-
+    joinGroup();
+    fetchMessages();
   </script>
-
 </body>
-
 </html>

@@ -7,6 +7,9 @@ const grpSchema = new Schema({
     type: String,
     required: true,
     },
+    fileLink: {
+        type: String,
+    },
     createdBy: {
         type:String
     },
