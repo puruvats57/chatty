@@ -49,7 +49,7 @@
             background-color: #005bbf;
         }
     </style>
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify@1.11.0/dist/toastify.min.css">
 </head>
 <body>
     <h1>Add Members Page</h1>
@@ -68,6 +68,7 @@
     <label for="email">Enter Email:</label>
     <input type="email" id="email" name="email" placeholder="user@example.com">
     <button id="sendInvite">Send Invite</button>
+    <script src="https://cdn.jsdelivr.net/npm/toastify@1.11.0/dist/toastify.min.js"></script>
 
     <script>
         const sendInviteButton = document.getElementById('sendInvite');
@@ -99,9 +100,17 @@
                 if (response.ok) {
                     // Handle a successful response here
                     console.log('Invite sent successfully');
+                    Toastify({
+                        text: 'Invite sent successfully',
+                        backgroundColor: 'green',
+                    }).showToast();
                 } else {
                     // Handle errors here
                     console.error('Failed to send invite');
+                    Toastify({
+                        text: 'Failed to send invite',
+                        backgroundColor: 'red',
+                    }).showToast();
                 }
             } catch (error) {
                 console.error('Error sending invite:', error);
