@@ -100,17 +100,11 @@
                 if (response.ok) {
                     // Handle a successful response here
                     console.log('Invite sent successfully');
-                    Toastify({
-                        text: 'Invite sent successfully',
-                        backgroundColor: 'green',
-                    }).showToast();
+                    alert('Invite sent successfully')
                 } else {
                     // Handle errors here
                     console.error('Failed to send invite');
-                    Toastify({
-                        text: 'Failed to send invite',
-                        backgroundColor: 'red',
-                    }).showToast();
+                    alert('Failed to send invite')
                 }
             } catch (error) {
                 console.error('Error sending invite:', error);
