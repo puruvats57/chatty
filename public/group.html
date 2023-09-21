@@ -254,7 +254,7 @@
         removeForMeButton.textContent = 'delete for me';
         removeForMeButton.classList.add('custom-button');
         removeForMeButton.addEventListener('click', async () => {
-          const response = await fetch('http://localhost:5000/deleteMsg', {
+          const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -269,7 +269,7 @@
           removeButton.textContent = 'delete for everyone';
           removeForMeButton.classList.add('custom-button');
           removeButton.addEventListener('click', async () => {
-            const response = await fetch('http://localhost:5000/deleteMsg', {
+            const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -311,7 +311,7 @@
         formData.append('file', file);
         formData.append('id', id);
         formData.append('uid', uid);
-        await fetch('http://localhost:5000/upload', {
+        await fetch('https://chat-tixo.onrender.com/upload', {
           method: 'POST',
           body: formData
         })
@@ -352,7 +352,7 @@
 
     async function fetchMessages() {
       try {
-        const response = await fetch('http://localhost:5000/openGroup', {
+        const response = await fetch('https://chat-tixo.onrender.com/openGroup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -399,7 +399,7 @@
           removeForMeButton.textContent = 'delete for me';
           removeForMeButton.classList.add('custom-button');
           removeForMeButton.addEventListener('click', async () => {
-            const response = await fetch('http://localhost:5000/deleteMsg', {
+            const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -416,7 +416,7 @@
             removeForMeButton.classList.add('custom-button');
             removeButton.addEventListener('click', async () => {
               console.log("remove", message.textid);
-              const response = await fetch('http://localhost:5000/deleteMsg', {
+              const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
