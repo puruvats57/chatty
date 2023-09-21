@@ -3,6 +3,8 @@
 
 <head>
   <title>Welcome to Chatty</title>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -93,18 +95,42 @@
             },
             body: JSON.stringify({ email: email, pass: pass })
           });
-
+          //console.log("res", response.ok);
+          var s = await response.json();
+          console.log("mesh", s.status);
           if (response.ok) {
-            const data = await response.json();
-            if (data.token) {
-              localStorage.setItem('token', data.token);
+            // const data = await response.json();
+            if (s.token) {
+              localStorage.setItem('token', s.token);
               console.log('Login successful');
+              Toastify({
+                text: 'Login successful',
+                duration: 2000, // Toast message will disappear after 3 seconds
+                backgroundColor: 'green',
+                position: 'right',
+              }).showToast();
               window.location.href = '/home'
             } else {
               console.error('Login failed');
+              Toastify({
+                text: s.status,
+                duration: 3000,
+
+                gravity: 'top-right', // Set gravity to 'top-right'
+                position: 'absolute', // Set position to 'absolute'
+                stopOnFocus: false, // Prevent the toast from closing on focus
+              }).showToast();
             }
           } else {
             console.error('Login failed');
+            Toastify({
+              text: s.status,
+              duration: 3000,
+
+              gravity: 'top-right', // Set gravity to 'top-right'
+              position: 'absolute', // Set position to 'absolute'
+              stopOnFocus: false,
+            }).showToast();
           }
         } catch (error) {
           console.error('Error:', error);

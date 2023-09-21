@@ -32,8 +32,8 @@ db.once('open', function () {
 const s3 = new aws.S3({
   region: 'us-east-1', // Change to your preferred AWS region
   credentials: {
-    accessKeyId:process.env.accessKeyId,
-    secretAccessKey:process.env.secretAccessKey,
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey,
   },
 });
 
@@ -284,7 +284,7 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'register.html'))
 });
-app.get('/creategrp',(req, res) => {
+app.get('/creategrp', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'creategrp.html'));
 });
 app.get('/group/:id', (req, res) => {
@@ -299,7 +299,7 @@ app.get('/grpJoined/:grpId/:email', (req, res) => {
 });
 
 app.post("/register", controller.register);
-app.post("/createGroup", isAuth,upload.single('file'), controller.createGroup);
+app.post("/createGroup", isAuth, upload.single('file'), controller.createGroup);
 app.post("/joinGroup", controller.joinGroup);
 
 app.post("/loginPost", controller.login_post);

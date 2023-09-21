@@ -25,7 +25,8 @@ exports.register = async (req, res) => {
   });
 
   await user.save();
-  res.status(200).json({ message: "Registration successful" });
+  //res.status(200).json({ message: "Registration successful" });
+  return res.redirect("/");
 
 }
 exports.login_post = async (req, res) => {
@@ -36,10 +37,10 @@ exports.login_post = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.json({ status: 'You are not Registered with us' });
+    return res.send({ status: 'Email does not exist please regsiter' });
   }
   if (user.password!== pass) {
-    return res.json({ status: 'Incorrect password' });
+    return res.send({ status: 'Incorrect password' });
   }
 
   console.log("posted");
