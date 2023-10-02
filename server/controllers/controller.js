@@ -32,14 +32,14 @@ exports.register = async (req, res) => {
 exports.login_post = async (req, res) => {
   console.log("lets post");
   console.log(req.body);
-  const { email,pass } = req.body;
+  const { email, pass } = req.body;
 
   const user = await User.findOne({ email });
 
   if (!user) {
     return res.send({ status: 'Email does not exist please regsiter' });
   }
-  if (user.password!== pass) {
+  if (user.password !== pass) {
     return res.send({ status: 'Incorrect password' });
   }
 
@@ -178,7 +178,7 @@ exports.getGroups = async (req, res) => {
   const formattedData = data.map((item, index) => ({
     _id: item._id.toString(),
     groupname: item.groupname,
-    fileLink:item.fileLink,
+    fileLink: item.fileLink,
     count: count[index]
   }));
   //console.log("data", formattedData);
@@ -257,7 +257,7 @@ exports.addMembers = async (req, res) => {
       pass: 'hixwjkmxxykbrnwt',
     },
   });
-  const dynamicURL = `https://chat-tixo.onrender.com/grpJoined/${grpId}/${email}`;
+  const dynamicURL = `http://localhost:5000/grpJoined/${grpId}/${email}`;
   // Create an HTML email template with a button
   const emailBody = `
   <html>
@@ -282,8 +282,11 @@ exports.addMembers = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error('Error sending email:', error);
+      res.status(500).json({ message: 'Failed to send email' });
+
     } else {
       console.log('Email sent:', info.response);
+      res.status(200).json({ message: 'Email sent successfully' });
     }
   });
 }
@@ -305,6 +308,13 @@ exports.grpJoined = async (req, res) => {
   io.to(grpId).emit('broadcastJoined', { name: user.name, id: user._id });
 
   res.status(200).json({ message: "group joined successfully" });
+}
+
+exports.getUsers = async (req, res) => {
+  const { uid } = req.body;
+  const users = await User.find({ _id: { $ne: uid } });
+  console.log("user", users);
+  return res.json({ status: 'ok', users });
 }
 
 

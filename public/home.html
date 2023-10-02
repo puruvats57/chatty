@@ -74,6 +74,7 @@
     <button onClick="logout()">Logout</button>
   </div>
 
+
   <h2>Group Chats</h2>
   <ul id="data-container"></ul>
 
@@ -81,6 +82,8 @@
   <script>
     const socket = io();
     var userId;
+
+
 
     socket.on('messageCount', ({ id, text, msgid, senderuid, senderName, count }) => {
       console.log("Received messageCount event - id:", id, "count:", count);
@@ -100,7 +103,7 @@
     var token;
 
     document.addEventListener("DOMContentLoaded", async function () {
-      socket.emit('onHome');
+      //socket.emit('onHome');
 
       token = localStorage.getItem('token');
 
@@ -126,8 +129,32 @@
         // Fetch and display JSON data using a POST request
         var dataContainer = document.getElementById('data-container');
 
+        // indiviual users send msg
+        const response = await fetch('http://localhost:5000/getUsers', {
+          method: 'POST',
+          headers,
+          body: bodyData
+        });
+        console.log("ers", response);
+        if (response.ok) {
+          const jsonData = await response.json();
+          console.log("ers", jsonData);
+          const listItem = document.createElement('li');
+          jsonData.users.forEach(item => {
+            console.log("users", item.name);
+            const groupLink = document.createElement('a');
+            groupLink.textContent = `${item.name}`;
+            groupLink.href = `/chat/${item._id}`;
+            listItem.appendChild(groupLink);
+            dataContainer.appendChild(listItem);
+
+          })
+
+
+        }
+
         try {
-          const response = await fetch('https://chat-tixo.onrender.com/getGroups', {
+          const response = await fetch('http://localhost:5000/getGroups', {
             method: 'POST',
             headers,
             body: bodyData
@@ -166,6 +193,7 @@
         } catch (error) {
           console.error('Error fetching JSON data:', error);
         }
+        socket.emit('onHome', { uid: userId });
       } else {
         console.error('Token not found');
       }

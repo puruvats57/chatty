@@ -20,7 +20,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/chat', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('mongodb Connected Successfully'))
   .catch((err) => { console.error(err); });
 
@@ -98,10 +98,13 @@ io.on('connection', newSocket => {
 
   });
 
-  socket.on('onHome', () => {
+  socket.on('onHome', async ({ uid }) => {
+    socket.join(uid)
+    console.log("uid of home", uid);
     console.log("came to home");
     messageCounts = 0;
   })
+
 
 
   socket.on('url', async (data) => {
@@ -190,7 +193,11 @@ io.on('connection', newSocket => {
 
     // End of url socket
   });
-
+  socket.on('sendMessage', async ({ id, text }) => {
+    console.log("id,txt", id, text);
+    socket.join(id);
+    io.to(id).emit('msg', { text });
+  })
 
   socket.on('newMessage', async ({ id, text, uid }) => {
     var senderuid = uid;
@@ -291,6 +298,10 @@ app.get('/group/:id', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'group.html'));
   //controller.openGroup(req, res,sock);
 });
+app.get('/chat/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'chat.html'));
+  //controller.openGroup(req, res,sock);
+});
 app.get('/addMembers/:queryString', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'addMembers.html'));
 });
@@ -308,6 +319,8 @@ app.post("/getGroups", controller.getGroups);
 app.post("/openGroup", controller.openGroup);
 app.post("/deleteMsg", controller.deleteMsg);
 app.post("/addMembers", controller.addMembers);
+app.post("/getUsers", controller.getUsers);
+
 //app.post('/grpJoined',controller.grpJoined);
 app.post('/grpJoined', async function (req, res) {
 

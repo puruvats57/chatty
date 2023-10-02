@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <input type="text" id="messageInput" />
+    <button id="sendMessage">send</button>
+    <div id="data-container"></div>
+
+    <style>
+        /* Add some CSS to style sent and received messages */
+        .message-container {
+            margin: 5px;
+        }
+
+        .sender-message {
+            background-color: #e2e2e2;
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .received-message {
+            background-color: #ffffff;
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+
+    <script>
+        const socket = io();
+        const currentUrl = window.location.href;
+        const url = new URL(currentUrl);
+        const pathSegments = url.pathname.split('/');
+        const id = pathSegments[pathSegments.length - 1];
+
+        function joinGroup() {
+            const messageContainer = document.getElementById('data-container');
+
+            socket.on('msg', ({ senderId, text }) => {
+                displayMessage(senderId, text);
+            });
+
+            document.getElementById('sendMessage').addEventListener('click', () => {
+                const text = document.getElementById('messageInput').value;
+
+                if (text) {
+                    socket.emit('sendMessage', { id, text });
+                    displayMessage(id, text); // Display the sent message
+                }
+            });
+        }
+
+        function displayMessage(senderId, text) {
+            const messageContainerDiv = document.createElement('div');
+            messageContainerDiv.classList.add('message-container');
+
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = text;
+
+            if (senderId === id) {
+                messageDiv.classList.add('sender-message');
+            } else {
+                messageDiv.classList.add('received-message');
+            }
+
+            messageContainerDiv.appendChild(messageDiv);
+            document.getElementById('data-container').appendChild(messageContainerDiv);
+        }
+
+        joinGroup();
+    </script>
+</body>
+
+</html>

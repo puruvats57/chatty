@@ -94,17 +94,17 @@
       padding: 10px;
       margin-bottom: 10px;
     }
+
     #add {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -116,7 +116,7 @@
   </div>
 
   <!--<div id="messages"></div>-->
-  <div id="data-container"style="margin-top: 20px;"></div>
+  <div id="data-container" style="margin-top: 20px;"></div>
   <input type="text" id="messageInput" placeholder="Type your message">
   <button id="sendMessage">Send</button>
   <input type="file" id="file" accept="image/*,.pdf">
@@ -232,7 +232,7 @@
 
           const uploadedImage = document.createElement('img');
           uploadedImage.style.display = 'none'; // Hide the image by default
-          uploadedImage.style.maxWidth = '100%';
+          uploadedImage.style.maxWidth = '20%';
           uploadedImage.style.height = 'auto';
           uploadedImage.id = 'uploadedImage';
 
@@ -254,7 +254,7 @@
         removeForMeButton.textContent = 'delete for me';
         removeForMeButton.classList.add('custom-button');
         removeForMeButton.addEventListener('click', async () => {
-          const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
+          const response = await fetch('http://localhost:5000/deleteMsg', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -269,7 +269,7 @@
           removeButton.textContent = 'delete for everyone';
           removeForMeButton.classList.add('custom-button');
           removeButton.addEventListener('click', async () => {
-            const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
+            const response = await fetch('http://localhost:5000/deleteMsg', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -311,7 +311,7 @@
         formData.append('file', file);
         formData.append('id', id);
         formData.append('uid', uid);
-        await fetch('https://chat-tixo.onrender.com/upload', {
+        await fetch('http://localhost:5000/upload', {
           method: 'POST',
           body: formData
         })
@@ -352,7 +352,7 @@
 
     async function fetchMessages() {
       try {
-        const response = await fetch('https://chat-tixo.onrender.com/openGroup', {
+        const response = await fetch('http://localhost:5000/openGroup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -399,7 +399,7 @@
           removeForMeButton.textContent = 'delete for me';
           removeForMeButton.classList.add('custom-button');
           removeForMeButton.addEventListener('click', async () => {
-            const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
+            const response = await fetch('http://localhost:5000/deleteMsg', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -416,7 +416,7 @@
             removeForMeButton.classList.add('custom-button');
             removeButton.addEventListener('click', async () => {
               console.log("remove", message.textid);
-              const response = await fetch('https://chat-tixo.onrender.com/deleteMsg', {
+              const response = await fetch('http://localhost:5000/deleteMsg', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

@@ -14,6 +14,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  contact: {
+    cname: {
+      type: String,
+      required: true,
+    },
+    msgIds: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Messages'
+
+    }],
+  },
   grpIds: {
     type: [
       {
@@ -29,13 +40,13 @@ const userSchema = new Schema({
         msgIds: [{
           type: Schema.Types.ObjectId,
           ref: 'Messages'
-      
+
         }],
         UnreadMsgs: [{
           type: Schema.Types.ObjectId,
           ref: 'Messages'
-      
-      }],
+
+        }],
       },
     ],
     default: [],
